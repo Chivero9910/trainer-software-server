@@ -136,7 +136,6 @@ router.post("/login", async (req, res, next) => {
 
 // GET "api/auth/verify"
 router.get("/verify", isAuthenticated, (req, res, next) => {
-  console.log(req.payload);
   res.status(200).json({user: req.payload})
 })
 
