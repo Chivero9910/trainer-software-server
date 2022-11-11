@@ -12,7 +12,11 @@ const routineSchema = new Schema(
       trainer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-      }
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
     },
     {
       // this second object adds extra properties: `createdAt` and `updatedAt`    

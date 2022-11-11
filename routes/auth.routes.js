@@ -5,7 +5,84 @@ const jwt = require("jsonwebtoken");
 const isAuthenticated = require("../middlewares/auth.middlewares");
 
 // POST "/api/auth/signup"
-router.post("/signup", async (req, res, next) => {
+router.post("/signup/trainer", async (req, res, next) => {
+  const {
+    email,
+    password,
+    businessName,
+    lastName,
+    phoneNumber,
+    birthDate,
+    genre,
+    name
+  } = req.body;
+
+  //* Validaciones
+
+  // Están cumplimentaddos todos los datos
+  if (
+    email === "" ||
+    password === "" ||
+    name === "" ||
+    lastName === "" ||
+    phoneNumber === "" ||
+    birthDate === "" ||
+    genre === "" ||
+    businessName === ""
+  ) {
+    res.status(400).json({ errorMessage: "¡Rellena todos los campos!" });
+    return;
+  }
+
+  // Mail recibe un formato válido
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    res.status(400).json({ message: "¡El mail introducido no es válido!" });
+    return;
+  }
+
+  // Contraseña válida
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res.status(400).json({
+      message:
+        "¡La contraseña debe tener al menos 6 carácteres y contener al menos un número, una minúscula y una mayúscula!",
+    });
+    return;
+  }
+
+  try {
+    const foundEmail = await User.findOne({ email });
+    if (foundEmail !== null) {
+      res
+        .status(400)
+        .json({ errorMessage: "El email ya ha sido previamente registrado" });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const newUser = {
+      email,
+      password: hashPassword,
+      businessName,
+      name,
+      lastName,
+      phoneNumber,
+      birthDate,
+      genre,
+      isTrainer: true
+    };
+
+    await User.create(newUser);
+    res.status(201).json("¡Usuario registrado correctamente!");
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/signup/client", async (req, res, next) => {
   const {
     email,
     password,
@@ -15,7 +92,6 @@ router.post("/signup", async (req, res, next) => {
     birthDate,
     genre,
     name,
-    role,
     trainerId,
   } = req.body;
 
@@ -75,7 +151,7 @@ router.post("/signup", async (req, res, next) => {
       birthDate,
       genre,
       trainerId,
-      role,
+      isTrainer: false
     };
 
     await User.create(newUser);

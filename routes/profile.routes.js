@@ -5,6 +5,8 @@ const Metrics = require("../models/Metrics.model");
 
 const router = require("express").Router();
 
+
+//GET "api/profile"
 router.get("/", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     try {
@@ -15,6 +17,17 @@ router.get("/", isAuthenticated, async(req, res, next) => {
     }
 })
 
+//GET "api/profile/trainers"
+router.get("/trainers", async(req, res, next) => {
+  try {
+      const trainerList = await User.find({isTrainer: true})
+      res.status(200).json(trainerList)
+  } catch (error) {
+      next(error)
+  }
+})
+
+//POST "api/profile/metrics"
 router.post("/metrics", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     const{
@@ -62,6 +75,7 @@ router.post("/metrics", isAuthenticated, async(req, res, next) => {
           }
 })
 
+//GET "api/profile/metrics"
 router.get("/metrics", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     try {
@@ -72,6 +86,7 @@ router.get("/metrics", isAuthenticated, async(req, res, next) => {
     }
 })
 
+//PATCH "api/profile/metrics/:idMetric"
 router.patch("/metrics/:idMetric", async(req, res, next) => {
     const{
             pesoCorporal,
@@ -117,6 +132,7 @@ router.patch("/metrics/:idMetric", async(req, res, next) => {
           }
 })
 
+//DELETE "api/profile/metrics/:idMetric"
 router.delete("/metrics/:idMetric", async(req, res, next) => {
     try {
         await Metrics.findByIdAndRemove(req.params.idMetric)
@@ -126,6 +142,7 @@ router.delete("/metrics/:idMetric", async(req, res, next) => {
     }
 })
 
+//PATCH "api/profile"
 router.patch("/", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     const {
@@ -203,6 +220,7 @@ router.patch("/", isAuthenticated, async(req, res, next) => {
       }
 })
 
+//DELETE "api/profile"
 router.delete("/", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     try {

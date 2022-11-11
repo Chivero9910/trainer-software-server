@@ -16,28 +16,11 @@ const userSchema = new Schema(
     name: String,
     lastName: String,
     phoneNumber: Number,
-    bodyMeasures: {
-      pesoCorporal: Number,
-      grasaCorporal: Number,
-      cuello: Number,
-      hombros: Number,
-      pecho: Number,
-      bicepsIzq: Number,
-      bicepsDer: Number,
-      anteBrazoIzq: Number,
-      anteBrazoDer: Number,
-      cintura: Number,
-      cadera: Number,
-      musloIzq: Number,
-      musloDer: Number,
-      gemeloIzq: Number,
-      gemeloDer: Number
-    },
     businessName: String,
-    birthDate: String,
+    birthDate: Date,
     genre: String,
     trainerId: String,
-    role: String
+    isTrainer: Boolean
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`    

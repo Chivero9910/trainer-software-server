@@ -13,4 +13,7 @@ router.use("/exercise", exercise)
 const profile = require("./profile.routes")
 router.use("/profile", profile)
 
+const routine = require("./routines.routes")
+router.use("/routine", routine)
+
 module.exports = router;

@@ -2,7 +2,7 @@ const { Schema, model, default: mongoose } = require("mongoose");
 
 const metricsSchema = new Schema(
   {
-
+    
       pesoCorporal: Number,
       grasaCorporal: Number,
       cuello: Number,
