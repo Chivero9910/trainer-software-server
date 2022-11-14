@@ -28,16 +28,27 @@ router.post("/", isAuthenticated, async(req, res, next) => {
 })
 
 // GET "/api/trainings"
-router.get("/", async(req, res, next) => {
+router.get("/", isAuthenticated, async(req, res, next) => {
+    const {_id} = req.payload
     try {
-       const trainings = await Training.find()
+       const trainings = await Training.find({trainerId: _id})
         res.status(200).json(trainings)
     } catch (error) {
         next(error)
     }
 })
 
-// PATCH "/api/:trainingId"
+// GET "/api/details/"
+router.get("/:trainingId", async(req, res, next) => {
+    try {
+       const training = await Training.findById(req.params.trainingId)
+        res.status(200).json(training)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// PATCH "/api/details/:trainingId"
 router.patch("/:trainingId", async(req, res, next) => {
     const {name, videoUrl, instructions, tags} = req.body
     try {

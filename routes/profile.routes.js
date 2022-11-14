@@ -17,6 +17,17 @@ router.get("/", isAuthenticated, async(req, res, next) => {
     }
 })
 
+//GET "api/profile/:clientId"
+router.get("/details/:clientId", async(req, res, next) => {
+  const {clientId} = req.params
+  try {
+      const profileInfo = await User.findById(clientId)
+      res.status(200).json(profileInfo)
+  } catch (error) {
+      next(error)
+  }
+})
+
 //GET "api/profile/trainers"
 router.get("/trainers", async(req, res, next) => {
   try {
@@ -84,6 +95,20 @@ router.get("/metrics", isAuthenticated, async(req, res, next) => {
     } catch (error) {
         next(error)
     }
+})
+
+//GET "api/profile/trainers-clients"
+router.get("/trainers-clients", isAuthenticated, async(req, res, next) => {
+  const {_id} = req.payload
+
+  console.log(_id)
+
+  try {
+    const clients = await User.find({trainerId: _id})
+    res.status(200).json(clients)
+  } catch (error) {
+    next ( error)
+  }
 })
 
 //PATCH "api/profile/metrics/:idMetric"

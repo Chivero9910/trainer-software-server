@@ -90,7 +90,7 @@ router.post("/signup/client", async (req, res, next) => {
     lastName,
     phoneNumber,
     birthDate,
-    genre,
+    gender,
     name,
     trainerId,
   } = req.body;
@@ -105,7 +105,7 @@ router.post("/signup/client", async (req, res, next) => {
     lastName === "" ||
     phoneNumber === "" ||
     birthDate === "" ||
-    genre === "" ||
+    gender === "" ||
     businessName === ""
   ) {
     res.status(400).json({ errorMessage: "¡Rellena todos los campos!" });
@@ -149,7 +149,7 @@ router.post("/signup/client", async (req, res, next) => {
       lastName,
       phoneNumber,
       birthDate,
-      genre,
+      gender,
       trainerId,
       isTrainer: false
     };

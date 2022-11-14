@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, default: mongoose } = require("mongoose");
 
 const userSchema = new Schema(
   {
@@ -18,8 +18,11 @@ const userSchema = new Schema(
     phoneNumber: Number,
     businessName: String,
     birthDate: Date,
-    genre: String,
-    trainerId: String,
+    gender: String,
+    trainerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
     isTrainer: Boolean
   },
   {
