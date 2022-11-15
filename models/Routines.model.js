@@ -6,7 +6,7 @@ const routineSchema = new Schema(
       description: String,
       trainings: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Trainings"
+        ref: "Training"
       }],
       isCompleted: Boolean,
       trainer: {
@@ -16,7 +16,8 @@ const routineSchema = new Schema(
       user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }
+    },
+    date: Date
     },
     {
       // this second object adds extra properties: `createdAt` and `updatedAt`    

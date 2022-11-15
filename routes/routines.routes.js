@@ -5,9 +5,9 @@ const isAuthenticated = require("../middlewares/auth.middlewares");
 const Routine = require("../models/Routines.model");
 
 // POST "/api/routine"
-router.post("/:clientId", isAuthenticated, async(req, res, next) => {
+router.post("/create/:clientId", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
-    const {name, description, trainings} = req.body
+    const {name, description, trainings, date} = req.body
     if(name === "" || description === "") {
         res.status(400).json({errorMessage: "¡Rellena todos los campos!"})
     }
@@ -18,7 +18,8 @@ router.post("/:clientId", isAuthenticated, async(req, res, next) => {
             description,
             trainings,
             user: req.params.clientId,
-            trainer: _id
+            trainer: _id,
+            date
         }
         await Routine.create(newRoutine)
         res.status(201).json("¡Rutina creada!")
@@ -42,8 +43,20 @@ router.get("/client", isAuthenticated, async (req, res, next) => {
 router.get("/:clientId", isAuthenticated, async (req, res, next) => {
     const {clientId} = req.params
     try {
-        const routines = await Routine.find({user: clientId})
+        const routines = await Routine.find({user: clientId}).populate("trainings")
+       
         res.status(200).json(routines)
+    } catch (error) {
+        next(error)
+    }
+})
+
+
+router.get("/routines/:routineId", async(req, res, next) => {
+    const {routineId} = req.params
+    try {
+        const routine = await Routine.findById({routineId})
+        res.status(200).json(routine)
     } catch (error) {
         next(error)
     }
