@@ -97,6 +97,26 @@ router.get("/metrics", isAuthenticated, async(req, res, next) => {
     }
 })
 
+router.get("/metrics/:idMetric", isAuthenticated, async(req, res, next) => {
+  const { idMetric} = req.params
+  try {
+      const metrics = await Metrics.findById(idMetric)
+      res.status(200).json(metrics)
+  } catch (error) {
+      next(error)
+  }
+})
+
+router.get("/metrics/details/:userId", async(req, res, next) => {
+  const { userId} = req.params
+  try {
+      const metrics = await Metrics.find({user: userId})
+      res.status(200).json(metrics)
+  } catch (error) {
+      next(error)
+  }
+})
+
 //GET "api/profile/trainers-clients"
 router.get("/trainers-clients", isAuthenticated, async(req, res, next) => {
   const {_id} = req.payload
@@ -168,33 +188,17 @@ router.delete("/metrics/:idMetric", async(req, res, next) => {
 })
 
 //PATCH "api/profile"
-router.patch("/", isAuthenticated, async(req, res, next) => {
+router.patch("/update", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     const {
         email,
         password,
-        businessName,
         lastName,
         phoneNumber,
         birthDate,
         genre,
-        name,
-        role,
-        trainerId,
+        name
       } = req.body;
-      if (
-        email === "" ||
-        password === "" ||
-        name === "" ||
-        lastName === "" ||
-        phoneNumber === "" ||
-        birthDate === "" ||
-        genre === "" ||
-        businessName === ""
-      ) {
-        res.status(400).json({ errorMessage: "¡Rellena todos los campos!" });
-        return;
-      }
     
       // Mail recibe un formato válido
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -228,14 +232,11 @@ router.patch("/", isAuthenticated, async(req, res, next) => {
         const newUser = {
           email,
           password: hashPassword,
-          businessName,
           name,
           lastName,
           phoneNumber,
           birthDate,
-          genre,
-          trainerId,
-          role,
+          genre
         };
     
         await User.findByIdAndUpdate(_id, newUser);
