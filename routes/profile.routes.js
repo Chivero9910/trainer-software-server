@@ -21,7 +21,7 @@ router.get("/", isAuthenticated, async(req, res, next) => {
 router.get("/details/:clientId", async(req, res, next) => {
   const {clientId} = req.params
   try {
-      const profileInfo = await User.findById(clientId)
+      const profileInfo = await User.findById(clientId).sort({date: 1})
       res.status(200).json(profileInfo)
   } catch (error) {
       next(error)
@@ -90,7 +90,7 @@ router.post("/metrics", isAuthenticated, async(req, res, next) => {
 router.get("/metrics", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     try {
-        const metrics = await Metrics.find({user: _id})
+        const metrics = await Metrics.find({user: _id}).sort({updatedAt: -1})
         res.status(200).json(metrics)
     } catch (error) {
         next(error)
@@ -100,7 +100,7 @@ router.get("/metrics", isAuthenticated, async(req, res, next) => {
 router.get("/metrics/:idMetric", isAuthenticated, async(req, res, next) => {
   const { idMetric} = req.params
   try {
-      const metrics = await Metrics.findById(idMetric)
+      const metrics = await Metrics.findById(idMetric).sort({updatedAt: -1})
       res.status(200).json(metrics)
   } catch (error) {
       next(error)
@@ -110,7 +110,7 @@ router.get("/metrics/:idMetric", isAuthenticated, async(req, res, next) => {
 router.get("/metrics/details/:userId", async(req, res, next) => {
   const { userId} = req.params
   try {
-      const metrics = await Metrics.find({user: userId})
+      const metrics = await Metrics.find({user: userId}).sort({updatedAt: -1})
       res.status(200).json(metrics)
   } catch (error) {
       next(error)
@@ -124,7 +124,7 @@ router.get("/trainers-clients", isAuthenticated, async(req, res, next) => {
   console.log(_id)
 
   try {
-    const clients = await User.find({trainerId: _id})
+    const clients = await User.find({trainerId: _id}).sort({date: 1})
     res.status(200).json(clients)
   } catch (error) {
     next ( error)

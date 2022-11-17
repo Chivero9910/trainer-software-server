@@ -32,7 +32,7 @@ router.post("/create/:clientId", isAuthenticated, async(req, res, next) => {
 router.get("/client", isAuthenticated, async(req, res, next) => {
     const {_id} = req.payload
     try {
-        const routines = await Routine.find({user: _id}).populate("trainings")
+        const routines = await Routine.find({user: _id}).populate("trainings").sort({date: 1})
         res.status(200).json(routines)
     } catch (error) {
         next(error)
@@ -43,7 +43,7 @@ router.get("/client", isAuthenticated, async(req, res, next) => {
 router.get("/:clientId", isAuthenticated, async (req, res, next) => {
     const {clientId} = req.params
     try {
-        const routines = await Routine.find({user: clientId}).populate("trainings")
+        const routines = await Routine.find({user: clientId}).populate("trainings").sort({date: 1})
        
         res.status(200).json(routines)
     } catch (error) {
