@@ -150,7 +150,6 @@ router.post("/signup/client", async (req, res, next) => {
       phoneNumber,
       birthDate,
       gender,
-      trainerId,
       isTrainer: false
     };
 
